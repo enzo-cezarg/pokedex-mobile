@@ -1,23 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/features/pokemon-list/components/pokemon_card.dart';
+import 'package:pokedex/models/pokemon.dart';
 
 class PokemonDetailsCard extends StatelessWidget {
-  final String name;
-  final int id;
+  final Pokemon pokemon;
 
-  const PokemonDetailsCard({super.key, required this.name, required this.id});
+  const PokemonDetailsCard({super.key, required this.pokemon});
 
   String get spriteUrl =>
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png';
 
   String get spriteBackUrl =>
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/$id.png';
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${pokemon.id}.png';
 
   @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(12),
+        borderRadius: .circular(12),
         side: BorderSide(
           color: Theme.of(context).colorScheme.primary,
           width: 3,
@@ -25,23 +26,23 @@ class PokemonDetailsCard extends StatelessWidget {
         ),
       ),
       child: SizedBox(
-        width: double.infinity,
+        width: .infinity,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const .symmetric(vertical: 16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: .center,
             children: [
               Row(
                 spacing: 16,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
                   SizedBox(
                     width: 150,
                     height: 150,
                     child: CachedNetworkImage(
                       imageUrl: spriteUrl,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.none,
+                      fit: .contain,
+                      filterQuality: .none,
                       placeholder: (context, url) => Center(
                         child: SizedBox(
                           width: 25,
@@ -60,8 +61,8 @@ class PokemonDetailsCard extends StatelessWidget {
                     height: 150,
                     child: CachedNetworkImage(
                       imageUrl: spriteBackUrl,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.none,
+                      fit: .contain,
+                      filterQuality: .none,
                       placeholder: (context, url) => Center(
                         child: SizedBox(
                           width: 25,
@@ -78,19 +79,42 @@ class PokemonDetailsCard extends StatelessWidget {
                 ],
               ),
               Text(
-                name,
+                pokemon.name.formatPokemonName(),
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: .w600,
                 ),
               ),
               Row(
                 spacing: 8,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
-                  Text('tipos', style: TextStyle(color: Colors.black)),
-                  Text('tipos', style: TextStyle(color: Colors.black)),
+                  ...pokemon.types.map(
+                    (type) => Padding(
+                      padding: const .only(top: 4),
+                      child: SizedBox(
+                        width: 70,
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/${type.id}.png',
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.none,
+                          placeholder: (context, url) => Center(
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Color.fromARGB(255, 102, 190, 113),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
