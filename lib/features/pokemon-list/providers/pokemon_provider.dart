@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pokedex/models/move_details.dart';
 import 'package:pokedex/models/pokemon.dart';
 
 class PokemonProvider extends ChangeNotifier {
@@ -19,6 +20,9 @@ class PokemonProvider extends ChangeNotifier {
   // getters de conveniência pra UI
   bool get isSearching => searchQuery.isNotEmpty;
   List<Map> get displayList => isSearching ? searchResults : paginatedList;
+
+  String get typeSpriteUrl =>
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/';
 
   // carrega todos os nomes uma vez
   Future<void> fetchAll() async {
@@ -52,6 +56,16 @@ class PokemonProvider extends ChangeNotifier {
       );
       final data = jsonDecode(res.body);
       return Pokemon.fromJson(data);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<MoveDetails> fetchMove(String url) async {
+    try {
+      final res = await http.get(Uri.parse(url));
+      final data = jsonDecode(res.body);
+      return MoveDetails.fromJson(data);
     } catch (e) {
       throw Exception(e.toString());
     }

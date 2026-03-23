@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/features/pokemon-list/components/pokemon_card.dart';
+import 'package:pokedex/features/pokemon-list/providers/pokemon_provider.dart';
 import 'package:pokedex/models/pokemon.dart';
+import 'package:provider/provider.dart';
 
 class PokemonDetailsCard extends StatelessWidget {
   final Pokemon pokemon;
@@ -16,6 +18,8 @@ class PokemonDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typeSpriteUrl = context.read<PokemonProvider>().typeSpriteUrl;
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: .circular(12),
@@ -96,8 +100,7 @@ class PokemonDetailsCard extends StatelessWidget {
                       child: SizedBox(
                         width: 70,
                         child: CachedNetworkImage(
-                          imageUrl:
-                              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/${type.id}.png',
+                          imageUrl: '$typeSpriteUrl${type.id}.png',
                           fit: BoxFit.contain,
                           filterQuality: FilterQuality.none,
                           placeholder: (context, url) => Center(

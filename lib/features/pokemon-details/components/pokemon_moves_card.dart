@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/features/pokemon-list/components/pokemon_card.dart';
+import 'package:pokedex/features/pokemon-move-details/pages/pokemon_move_details.dart';
 import 'package:pokedex/models/pokemon.dart';
 
 class PokemonMovesCard extends StatelessWidget {
@@ -68,7 +69,35 @@ class PokemonMovesCard extends StatelessWidget {
                             Padding(
                               padding: .only(right: 10),
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) => PokemonMoveDetails(move: move),
+                                    transitionDuration: Duration(
+                                      milliseconds: 200,
+                                    ),
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: const Offset(1, 0),
+                                              end: Offset.zero,
+                                            ).animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                  ),
+                                ),
                                 icon: Icon(Icons.chevron_right),
                               ),
                             ),
